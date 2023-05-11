@@ -1,9 +1,4 @@
-var express = require('express');
-var router = express.Router();
+import usersRouter from "./users.js";
+import productsRouter from "./product.js";
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+export { usersRouter, productsRouter };

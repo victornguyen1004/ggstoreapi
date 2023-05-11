@@ -1,9 +1,19 @@
-var express = require('express');
-var router = express.Router();
+import express from "express";
+const router = express.Router();
+import { body, validationResult } from "express-validator";
+import {
+  userController,
+}
+from '../controllers/index.js'
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get("/:id", userController.getDetailUser)
 
-module.exports = router;
+router.post("/login", 
+body('email').isEmail(),
+body('password').isLength( {min:5} ),
+userController.login
+);
+
+router.post("/register", userController.register)
+
+export default router;
