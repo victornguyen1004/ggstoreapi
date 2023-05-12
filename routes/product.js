@@ -4,14 +4,18 @@ import { productController } from "../controllers/index.js";
 
 router.get("/", productController.getAllProducts);
 
-router.get("/", )
+router.get("/id/:id", productController.getProductById);
 
-router.post("/insertProduct", productController.insertProduct);
+router.get("/name/:slug", productController.getProductBySlug);
 
-router.post("/insertMultipleProducts", productController.insertMultiple);
+router.post("/insert", productController.insertProduct);
 
-router.patch("/update", productController.update);
+router.post("/insertmany", productController.insertMultiple);
 
-router.post("")
+router.patch("/update", productController.updateProduct);
+
+router.delete("/delete", productController.deleteProduct);
+
+router.delete("/deleteall", productController.deleteAllProducts);
 
 export default router;

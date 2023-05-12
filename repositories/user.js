@@ -18,15 +18,15 @@ const login = async ({ email, password }) => {
         process.env.JWT_SECRET,
         {
           // expiresIn: '60' //1min
-          expiresIn: '600'
+          expiresIn: "4d",
         }
-      )
+      );
       // clone and add more properties
       return {
         ...existingUser.toObject(),
         password: "Not showed",
-        token: token
-      }
+        token: token,
+      };
     } else {
       throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD);
     }

@@ -1,7 +1,6 @@
 import { MAX_RECORDS } from "../Global/constants.js";
 import HttpStatusCode from "../exceptions/HttpStatusCode.js";
 import { productRepository } from "../repositories/index.js";
-import product from "../repositories/product.js";
 
 async function getAllProducts(req, res) {
   //http:localhost:3000?page=1&size=100
@@ -14,13 +13,19 @@ async function getAllProducts(req, res) {
       page,
       searchString,
     });
-    res.status(HttpStatusCode.OK).json({
-      message: "Get all product successfully",
-      size: filteredProducts.length,
-      page,
-      searchString,
-      data: filteredProducts,
-    });
+    if (filteredProducts.length > 0) {
+      res.status(HttpStatusCode.OK).json({
+        message: "Get all product successfully",
+        size: filteredProducts.length,
+        page,
+        searchString,
+        data: filteredProducts,
+      });
+    } else {
+      res.status(HttpStatusCode.OK).json({
+        message: "Executed. No products in the storage",
+      });
+    }
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: exception.message,
@@ -38,9 +43,26 @@ async function getProductById(req, res) {
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: exception.message,
+      message: "Cannot get product with id: " + req.params.id,
     });
   }
+}
+
+async function getProductBySlug(req, res) {
+  let productSlug = req.params.slug;
+  const product = await productRepository.getProductBySlug(productSlug);
+  console.log(product);
+  if (product.length <= 0) {
+    console.log(product);
+    return res.status(HttpStatusCode.OK).json({
+      message: "Cannot get product with slug: " + req.params.slug,
+      data: product,
+    });
+  }
+  return res.status(HttpStatusCode.OK).json({
+    message: "Successfully get product with slug: " + productSlug,
+    result: product,
+  });
 }
 
 async function insertProduct(req, res) {
@@ -73,8 +95,7 @@ async function insertMultiple(req, res) {
 }
 
 async function updateProduct(req, res) {
-  const { id, name, price, rating, category, description, imgUrl, slug } =
-    req.body;
+  const { id, name, price, rating, category, description, imgUrl } = req.body;
 
   try {
     const updatedProduct = await productRepository.updateProduct(req.body);
@@ -94,10 +115,9 @@ async function updateProduct(req, res) {
 async function deleteProduct(req, res) {
   const id = req.body.id;
   try {
-    const result = await productRepository.deleteProduct(id);
+    await productRepository.deleteProduct(id);
     res.status(HttpStatusCode.INSERT_OK).json({
-      message: "Product deleted successfully",
-      deleted: result.id,
+      message: `Successfully deleted product with id ${id}`,
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -109,10 +129,17 @@ async function deleteProduct(req, res) {
 async function deleteAllProducts(req, res) {
   try {
     const result = await productRepository.deleteAllProducts();
-    res.status(HttpStatusCode.OK).json({
-      message: "Successfully deleted all products",
-      deleted: result,
-    });
+    if (result.deletedCount > 0) {
+      res.status(HttpStatusCode.OK).json({
+        message: "Successfully deleted all products",
+        deleted: result,
+      });
+    } else {
+      res.status(HttpStatusCode.OK).json({
+        message:
+          "Executed, no products were deleted as there were no products available in the storage.",
+      });
+    }
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: exception.message,
@@ -123,6 +150,7 @@ async function deleteAllProducts(req, res) {
 export default {
   getAllProducts,
   getProductById,
+  getProductBySlug,
   insertProduct,
   insertMultiple,
   updateProduct,

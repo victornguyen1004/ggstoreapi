@@ -4,12 +4,17 @@ import jwt from "jsonwebtoken";
 export default function checkToken(req, res, next) {
   //bypass login, register, all harmless get function
   if (
-    req.url.toLowerCase().trim() == "/users/login".toLowerCase().trim() ||
-    req.url.toLowerCase().trim() == "/users/register".toLowerCase().trim() ||
-    (req.url.toLowerCase().trim() == "/products".toLowerCase().trim() &&
-      !req.query.searchString) ||
-    (req.url.toLowerCase().trim().startsWith("/products") &&
-      req.query.searchString)
+    req.method === "GET" &&
+    req.url.toLowerCase().trim().startsWith("/products")
+  ) {
+    next();
+    return;
+  }
+
+  if (
+    req.method === "POST" &&
+    (req.url.toLowerCase().trim() == "/users/login".toLowerCase().trim() ||
+      req.url.toLowerCase().trim() == "/users/register".toLowerCase().trim())
   ) {
     next();
     return;

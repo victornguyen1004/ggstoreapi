@@ -1,5 +1,6 @@
 import Exception from "../exceptions/Exception.js";
 import { Product } from "../models/index.js";
+import slug from "slug";
 
 const getAllProducts = async ({ page, size, searchString }) => {
   // aggregate data for all students
@@ -37,6 +38,24 @@ const getProductById = async (productId) => {
   return product ?? {}; // default value
 };
 
+const getProductBySlug = async (productSlug) => {
+  // const product = await Product.find({ slug: productSlug });
+  // debugger;
+  // if (!product) {
+  //   throw new Exception("Cannot find product with slug " + productSlug);
+  // }
+  // return product ?? {}; // default value
+  try {
+    const product = await Product.find({ slug: productSlug });
+    if (!product) {
+      return [];
+    }
+    return product;
+  } catch (exception) {
+    throw new Exception("Error...");
+  }
+};
+
 const insertProduct = async ({
   name,
   price,
@@ -44,9 +63,10 @@ const insertProduct = async ({
   category,
   description,
   imgUrl,
-  slug,
 }) => {
   try {
+    let resultSlug = slug(name);
+    console.log(slug);
     const product = await Product.create({
       name,
       price,
@@ -54,7 +74,7 @@ const insertProduct = async ({
       category,
       description,
       imgUrl,
-      slug,
+      slug: resultSlug,
     });
     return product;
   } catch (exception) {
@@ -76,7 +96,7 @@ async function insertMultiple(receivedProducts) {
         category: receivedProducts[i].category,
         description: receivedProducts[i].description,
         imgUrl: receivedProducts[i].imgUrl,
-        slug: receivedProducts[i].slug,
+        slug: slug(receivedProducts[i].name),
       };
       products.push(product);
     }
@@ -98,7 +118,6 @@ const updateProduct = async ({
   category,
   description,
   imgUrl,
-  slug,
 }) => {
   const product = await Product.findById(id);
   product.name = name ?? product.name;
@@ -107,7 +126,7 @@ const updateProduct = async ({
   product.category = category ?? product.category;
   product.description = description ?? product.description;
   product.imgUrl = imgUrl ?? product.imgUrl;
-  product.slug = slug ?? product.slug;
+  product.slug = slug(name);
   await product.save();
   return product;
 };
@@ -136,6 +155,7 @@ const deleteAllProducts = async () => {
 export default {
   getAllProducts,
   getProductById,
+  getProductBySlug,
   insertProduct,
   insertMultiple,
   updateProduct,

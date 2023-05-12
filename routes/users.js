@@ -6,8 +6,6 @@ import {
 }
 from '../controllers/index.js'
 
-router.get("/:id", userController.getDetailUser)
-
 router.post("/login", 
 body('email').isEmail(),
 body('password').isLength( {min:5} ),

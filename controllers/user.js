@@ -1,6 +1,5 @@
 import { body, validationResult } from "express-validator";
 import HttpStatusCode from "../exceptions/HttpStatusCode.js";
-import Exception from "../exceptions/Exception.js";
 import { userRepository } from "../repositories/index.js";
 import { EventEmitter } from "node:events";
 const myEvent = new EventEmitter();
@@ -38,7 +37,7 @@ const register = async (req, res) => {
   const { name, email, password, phoneNumber, address } = req.body;
 
   // EventEmitter
-  myEvent.emit("event.register.user", { email, address, phoneNumber });
+  myEvent.emit("event.register.user", { name, email, address, phoneNumber });
 
   try {
     debugger;
@@ -61,12 +60,7 @@ const register = async (req, res) => {
   }
 };
 
-const getDetailUser = async (req, res) => {};
-
-// many other functions
-
 export default {
   login,
   register,
-  getDetailUser,
 };
