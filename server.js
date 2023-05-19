@@ -4,6 +4,7 @@ dotenv.config();
 import {
   usersRouter,
   productsRouter,
+  categoriesRouter,
 } from "./routes/index.js";
 import connect from "./database/database.js";
 import checkToken from "./authentication/auth.js";
@@ -18,6 +19,7 @@ const port = process.env.PORT ?? 3000;
 
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
+app.use("/categories", categoriesRouter);
 
 app.listen(port, async () => {
   await connect();

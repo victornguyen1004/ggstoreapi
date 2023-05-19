@@ -4,8 +4,10 @@ import jwt from "jsonwebtoken";
 export default function checkToken(req, res, next) {
   //bypass login, register, all harmless get function
   if (
-    req.method === "GET" &&
-    req.url.toLowerCase().trim().startsWith("/products")
+    (req.method === "GET" &&
+      req.url.toLowerCase().trim().startsWith("/products")) ||
+    req.url.toLowerCase().trim().startsWith("/categories") ||
+    req.url.toLowerCase().trim().startsWith("/customers")
   ) {
     next();
     return;

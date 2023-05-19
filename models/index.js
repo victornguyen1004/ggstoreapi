@@ -1,4 +1,6 @@
 import User from "./User.js";
 import Product from "./Product.js";
+import Category from "./Category.js";
+import Customer from "./Customer.js"
 
-export { User, Product };
+export { User, Product, Category, Customer };
