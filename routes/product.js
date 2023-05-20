@@ -8,13 +8,13 @@ router.get("/id/:id", productController.getProductById);
 
 router.get("/name/:slug", productController.getProductBySlug);
 
-router.post("/insert", productController.insertProduct);
+router.post("/", productController.insertProduct);
 
-router.post("/insertmany", productController.insertMultiple);
+router.post("/insertmultiple", productController.insertMultiple);
 
-router.patch("/update", productController.updateProduct);
+router.patch("/", productController.updateProduct);
 
-router.delete("/delete", productController.deleteProduct);
+router.delete("/", productController.deleteProduct);
 
 router.delete("/deleteall", productController.deleteAllProducts);
 

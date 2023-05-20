@@ -5,6 +5,8 @@ import {
   usersRouter,
   productsRouter,
   categoriesRouter,
+  feedbacksRouter,
+  customersRouter,
 } from "./routes/index.js";
 import connect from "./database/database.js";
 import checkToken from "./authentication/auth.js";
@@ -20,6 +22,8 @@ const port = process.env.PORT ?? 3000;
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/categories", categoriesRouter);
+app.use("/feedbacks", feedbacksRouter);
+app.use("/customers", customersRouter);
 
 app.listen(port, async () => {
   await connect();

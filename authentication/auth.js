@@ -7,6 +7,7 @@ export default function checkToken(req, res, next) {
     (req.method === "GET" &&
       req.url.toLowerCase().trim().startsWith("/products")) ||
     req.url.toLowerCase().trim().startsWith("/categories") ||
+    req.url.toLowerCase().trim().startsWith("/feedbacks") ||
     req.url.toLowerCase().trim().startsWith("/customers")
   ) {
     next();
