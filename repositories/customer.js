@@ -30,13 +30,7 @@ const getAllCustomers = async ({ page, size, searchString }) => {
   return filteredCustomers;
 };
 
-const insertCustomer = async ({
-  id,
-  name,
-  imgUrl,
-  link,
-  isActive
-}) => {
+const insertCustomer = async ({ id, name, imgUrl, link, isActive }) => {
   try {
     const customer = await Customer.create({
       id,
@@ -77,46 +71,23 @@ async function insertMultiple(receivedCustomers) {
         throw new Exception("Input error", exception.errors);
       }
     }
-  }
-  else {
-    throw new Exception("Input error!")
+  } else {
+    throw new Exception("Input error!");
   }
 }
 
-// const getStudentById = async (studentId) => {
-//   const student = await Student.findById(studentId);
-//   if (!student) {
-//     throw new Exception("Cannot find student with id " + studentId);
-//   }
-//   return student ?? {}; // default value
-// };
-
-// const updateStudent = async ({
-//   id,
-//   name,
-//   unit,
-//   length,
-//   route,
-//   phoneNumber,
-//   time,
-//   routeNumber,
-//   spacing,
-// }) => {
-//   //   console.log("insert student");
-//   const bus = await Bus.findById(id);
-//   debugger;
-//   student.name = name ?? student.name;
-//   student.email = email ?? student.email;
-//   student.languages = languages ?? student.languages;
-//   student.gender = gender ?? student.gender;
-//   student.phoneNumber = phoneNumber ?? student.phoneNumber;
-//   student.address = address ?? student.address;
-//   await student.save();
-//   return student;
-// };
+const deleteAllCustomers = async () => {
+  try {
+    const result = await Customer.deleteMany({});
+    return result;
+  } catch (exception) {
+    throw new Exception("Error deleting all customers");
+  }
+};
 
 export default {
   getAllCustomers,
   insertCustomer,
   insertMultiple,
+  deleteAllCustomers,
 };
