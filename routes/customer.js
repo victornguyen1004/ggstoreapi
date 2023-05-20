@@ -4,8 +4,10 @@ import { customerController } from "../controllers/index.js";
 
 router.get("/", customerController.getAllCustomers);
 
-router.post("/insertCustomer", customerController.insertCustomer);
+router.post("/", customerController.insertCustomer);
 
-router.post("/insertMultipleCustomers", customerController.insertMultiple);
+router.post("/insertmultiple", customerController.insertMultiple);
+
+router.delete("/deleteall", customerController.deleteAllCustomers);
 
 export default router;

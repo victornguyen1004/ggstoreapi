@@ -57,8 +57,23 @@ async function insertMultiple(req, res) {
   }
 }
 
+async function deleteAllCustomers(req, res) {
+  try {
+    const result = await customerRepository.deleteAllCustomers();
+    res.status(HttpStatusCode.OK).json({
+      message: "All customers deleted successfully",
+      data: result,
+    });
+  } catch (exception) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: exception.message,
+    });
+  }
+}
+
 export default {
   getAllCustomers,
   insertCustomer,
   insertMultiple,
+  deleteAllCustomers,
 };
