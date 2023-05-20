@@ -18,14 +18,15 @@ app.use(checkToken); // A safeguard for endpoints
 app.use(express.json());
 const port = process.env.PORT ?? 3000;
 
-
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/feedbacks", feedbacksRouter);
 app.use("/customers", customersRouter);
 
-app.listen(port, async () => {
+const server = app.listen(port, async () => {
   await connect();
   console.log(`listening on port ${port}`);
 });
+
+export default app;
