@@ -1,5 +1,6 @@
 import HttpStatusCode from "../exceptions/HttpStatusCode.js";
 import { categoryRepository } from "../repositories/index.js";
+import { MAX_RECORDS } from "../Global/constants.js";
 
 async function getAllCategories(req, res) {
   //http:localhost:3000?page=1&size=100
@@ -7,17 +8,17 @@ async function getAllCategories(req, res) {
   let { page = 1, size = MAX_RECORDS, searchString = "" } = req.query;
   size = size >= MAX_RECORDS ? MAX_RECORDS : size;
   try {
-    let filteredProducts = await categoryRepository.getAllCategories({
+    let filteredCategories = await categoryRepository.getAllCategories({
       size,
       page,
       searchString,
     });
     res.status(HttpStatusCode.OK).json({
       message: "Get all category successfully",
-      size: filteredProducts.length,
+      size: filteredCategories.length,
       page,
       searchString,
-      data: filteredProducts,
+      data: filteredCategories,
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -31,7 +32,7 @@ async function insertCategory(req, res) {
     const category = await categoryRepository.insertCategory(req.body);
     res.status(HttpStatusCode.INSERT_OK).json({
       message: "Insert category successfully",
-      data: product,
+      data: category,
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
