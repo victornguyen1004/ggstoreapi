@@ -31,7 +31,6 @@ const getAllFeedbacks = async ({ page, size, searchString }) => {
 };
 
 const insertFeedback = async ({
-  id,
   title,
   content,
   userId,
@@ -40,7 +39,6 @@ const insertFeedback = async ({
 }) => {
   try {
     const feedback = await Feedback.create({
-      id,
       title,
       content,
       userId,
@@ -50,7 +48,6 @@ const insertFeedback = async ({
     return feedback;
   } catch (exception) {
     if (!!exception.errors) {
-      //error from validation
       throw new Exception("Input error", exception.errors);
     }
   }
@@ -58,11 +55,11 @@ const insertFeedback = async ({
 
 async function insertMultipleFeedbacks(receivedFeedbacks) {
   try {
-    debugger;
     let feedbacks = [];
+    let insertedFeedbacks = [];
+
     for (let i = 0; i < receivedFeedbacks.length; i++) {
       let feedback = {
-        id: receivedFeedbacks[i].id,
         title: receivedFeedbacks[i].title,
         content: receivedFeedbacks[i].content,
         userId: receivedFeedbacks[i].userId,
@@ -71,12 +68,13 @@ async function insertMultipleFeedbacks(receivedFeedbacks) {
       };
       feedbacks.push(feedback);
     }
-    debugger;
-    await Feedback.insertMany(feedbacks);
+
+    const insertedDocs = await Feedback.insertMany(feedbacks);
+    insertedFeedbacks = insertedDocs.map((doc) => doc.toObject());
+
+    return insertedFeedbacks;
   } catch (exception) {
     if (!!exception.errors) {
-      debugger;
-      //error from validation
       throw new Exception("Input error", exception.errors);
     }
   }
@@ -112,7 +110,6 @@ const updateFeedback = async ({
   productId,
 }) => {
   const feedback = await Feedback.findById(id);
-  feedback.id = id ?? feedback.id;
   feedback.title = title ?? feedback.title;
   feedback.content = content ?? feedback.content;
   feedback.userId = userId ?? feedback.userId;

@@ -78,7 +78,7 @@ async function deleteCategory(req, res) {
   const id = req.body.id;
   try {
     await categoryRepository.deleteCategory(id);
-    res.status(HttpStatusCode.INSERT_OK).json({
+    res.status(HttpStatusCode.OK).json({
       message: `Successfully deleted category with id ${id}`,
     });
   } catch (exception) {
