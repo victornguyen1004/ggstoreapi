@@ -7,9 +7,9 @@ const Feedback = mongoose.model(
       id: { type: ObjectId },
       title: { type: String },
       content: { type: String },
-      userId: { type: ObjectId },
+      userId: { type: String },
       rating: { type: Number },
-      productId: { type: ObjectId },
+      productId: { type: String },
     },
     {
       autoCreate: false,

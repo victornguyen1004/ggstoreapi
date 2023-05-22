@@ -2,53 +2,74 @@ import { expect } from "chai";
 import request from "supertest";
 import app from "../server.js";
 import HttpStatusCode from "../exceptions/HttpStatusCode.js";
+import jwt from "jsonwebtoken";
+import Customer from "../models/Customer.js";
 
 describe("Customer API", () => {
+  const user = { userId: "user123" };
+  const token = jwt.sign(user, process.env.JWT_SECRET);
+
   it("should return all customers", async () => {
     const response = await request(app).get("/customers");
     expect(response.status).to.equal(HttpStatusCode.OK);
-    expect(response.body).to.be.an("array");
+    expect(response.body).to.have.property("message");
+    expect(response.body.message).to.equal("Get all customers successfully");
   });
 
-  it("should create a new customer", async () => {
+  it("should insert a new customer", async () => {
     const newCustomer = {
       name: "John Doe",
-      email: "johndoe@example.com",
-      address: "123 Main St",
-      phoneNumber: "1234567890",
-    };
-
-    const response = await request(app).post("/customers").send(newCustomer);
-
-    expect(response.status).to.equal(HttpStatusCode.CREATED);
-    expect(response.body).to.be.an("object");
-  });
-
-  it("should update a customer", async () => {
-    const customerId = "customer_id_to_update";
-    const updatedCustomer = {
-      name: "Updated Name",
-      email: "updatedemail@example.com",
-      address: "456 Elm St",
-      phoneNumber: "9876543210",
+      imgUrl: "https://example.com/img.jpg",
+      link: "https://example.com",
+      isActive: true,
     };
 
     const response = await request(app)
-      .patch("/customers")
-      .send({ customerId, updatedCustomer });
+      .post("/customers")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newCustomer);
 
-    expect(response.status).to.equal(HttpStatusCode.OK);
-    expect(response.body).to.be.an("object");
+    expect(response.status).to.equal(HttpStatusCode.INSERT_OK);
+    expect(response.body.message).to.equal("Insert customer successfully");
+    expect(response.body.data).to.have.property("_id");
+    expect(response.body.data.name).to.equal(newCustomer.name);
   });
 
-  it("should delete a customer", async () => {
-    const customerId = "customer_id_to_delete";
+  it("should insert multiple customers", async () => {
+    const customers = [
+      {
+        name: "Jane Smith",
+        imgUrl: "https://example.com/img1.jpg",
+        link: "https://example.com",
+        isActive: true,
+      },
+      {
+        name: "Bob Johnson",
+        imgUrl: "https://example.com/img2.jpg",
+        link: "https://example.com",
+        isActive: true,
+      },
+    ];
 
     const response = await request(app)
-      .delete("/customers")
-      .send({ customerId });
+      .post("/customers/insertmultiple")
+      .set("Authorization", `Bearer ${token}`)
+      .send(customers);
+
+    expect(response.status).to.equal(HttpStatusCode.INSERT_OK);
+    expect(response.body.message).to.equal(
+      "Insert multiple customers successfully"
+    );
+  });
+
+  it("should delete all customers", async () => {
+    const response = await request(app)
+      .delete("/customers/deleteall")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).to.equal(HttpStatusCode.OK);
-    expect(response.body).to.be.an("object");
+    expect(response.body.message).to.equal(
+      "All customers deleted successfully"
+    );
   });
 });

@@ -1,12 +1,6 @@
 import { body, validationResult } from "express-validator";
 import HttpStatusCode from "../exceptions/HttpStatusCode.js";
 import { userRepository } from "../repositories/index.js";
-import { EventEmitter } from "node:events";
-const myEvent = new EventEmitter();
-// Listen
-myEvent.on("event.register.user", (params) => {
-  console.log(`They talked about: ${JSON.stringify(params)}`);
-});
 
 const login = async (req, res) => {
   const errors = validationResult(req);
@@ -35,9 +29,6 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   // destructuring
   const { name, email, password, phoneNumber, address } = req.body;
-
-  // EventEmitter
-  myEvent.emit("event.register.user", { name, email, address, phoneNumber });
 
   try {
     debugger;

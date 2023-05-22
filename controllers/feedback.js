@@ -8,7 +8,7 @@ async function getAllFeedbacks(req, res) {
   let { page = 1, size = MAX_RECORDS, searchString = "" } = req.query;
   size = size >= MAX_RECORDS ? MAX_RECORDS : size;
   try {
-    let filteredFeedbacks = await busRepository.getAllFeedbacks({
+    let filteredFeedbacks = await feedbackRepository.getAllFeedbacks({
       size,
       page,
       searchString,
@@ -44,9 +44,10 @@ async function insertFeedback(req, res) {
 
 async function insertMultipleFeedbacks(req, res) {
   try {
-    await feedbackRepository.insertMultipleFeedbacks(req.body);
+    const insertedFeedbacks = await feedbackRepository.insertMultipleFeedbacks(req.body);
     res.status(HttpStatusCode.INSERT_OK).json({
       message: "Insert multiple feedbacks successfully",
+      data: insertedFeedbacks,
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -57,12 +58,11 @@ async function insertMultipleFeedbacks(req, res) {
 }
 
 async function deleteFeedback(req, res) {
-  debugger;
   const id = req.body.id;
   try {
     const result = await feedbackRepository.deleteFeedback(id);
-    res.status(HttpStatusCode.INSERT_OK).json({
-      message: "Feedback deleted successfully",
+    res.status(HttpStatusCode.OK).json({
+      message: `Successfully deleted feedback with id ${id}`,
       data: result,
     });
   } catch (exception) {
@@ -93,7 +93,7 @@ async function updateFeedback(req, res) {
     const updateFeedback = await feedbackRepository.updateFeedback(req.body);
 
     res.status(HttpStatusCode.OK).json({
-      message: `Updated feedback with id ${id} successfully`,
+      message: `Successfully updated feedback with id ${id}`,
       data: updateFeedback,
     });
   } catch (exception) {
