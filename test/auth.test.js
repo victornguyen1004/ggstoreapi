@@ -76,5 +76,4 @@ describe("Authentication Middleware", () => {
     // Add more expectations if necessary
   });
 
-  // Add more tests for different scenarios and edge cases
 });

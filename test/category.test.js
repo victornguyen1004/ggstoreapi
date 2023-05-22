@@ -21,7 +21,7 @@ describe("Category API", () => {
     };
 
     const response = await request(app)
-      .post("/categories")
+      .post("/categories")  
       .set("Authorization", `Bearer ${token}`)
       .send(newCategory);
 
