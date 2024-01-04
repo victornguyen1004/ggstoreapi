@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(checkToken); // A safeguard for endpoints
 app.use(express.json());
-const port = process.env.PORT ?? 3000;
+const port = process.env.PORT ?? 3001;
 
 app.use("/users", usersRouter);
 
@@ -19,4 +19,4 @@ const server = app.listen(port, async () => {
   console.log(`listening on port ${port}`);
 });
 
-export default app;
+export default server;
