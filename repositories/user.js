@@ -35,7 +35,7 @@ const login = async ({ email, password }) => {
   }
 };
 
-const register = async ({ name, email, password, phoneNumber, address }) => {
+const register = async ({ name, email, password, imgUrl, balance }) => {
   // validation already done
   debugger;
   let existingUser = await User.findOne({ email }).exec();
@@ -57,8 +57,8 @@ const register = async ({ name, email, password, phoneNumber, address }) => {
     name,
     email,
     password: hashedPassword,
-    phoneNumber,
-    address,
+    imgUrl,
+    balance,
   });
   return {
     ...newUser._doc,

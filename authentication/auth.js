@@ -5,10 +5,7 @@ export default function checkToken(req, res, next) {
   // Bypass login, register, harmless GET requests
   if (
     req.method === "GET" &&
-    (req.url.toLowerCase().trim().startsWith("/products") ||
-      req.url.toLowerCase().trim().startsWith("/categories") ||
-      req.url.toLowerCase().trim().startsWith("/feedbacks") ||
-      req.url.toLowerCase().trim().startsWith("/customers"))
+    req.url.toLowerCase().trim().startsWith("/users")
   ) {
     next();
     return;

@@ -26,13 +26,7 @@ export default mongoose.model(
       required: true,
       // validate ??
     },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
-    address: {
-      type: String,
-      required: false,
-    },
+    imgUrl: { type: String, required: false },
+    balance: { type: Number, required: true },
   })
 );

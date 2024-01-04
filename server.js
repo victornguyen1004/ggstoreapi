@@ -1,13 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 dotenv.config();
-import {
-  usersRouter,
-  productsRouter,
-  categoriesRouter,
-  feedbacksRouter,
-  customersRouter,
-} from "./routes/index.js";
+import { usersRouter } from "./routes/index.js";
 import connect from "./database/database.js";
 import checkToken from "./authentication/auth.js";
 import cors from "cors";
@@ -19,10 +13,6 @@ app.use(express.json());
 const port = process.env.PORT ?? 3000;
 
 app.use("/users", usersRouter);
-app.use("/products", productsRouter);
-app.use("/categories", categoriesRouter);
-app.use("/feedbacks", feedbacksRouter);
-app.use("/customers", customersRouter);
 
 const server = app.listen(port, async () => {
   await connect();

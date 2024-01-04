@@ -17,7 +17,7 @@ const login = async (req, res) => {
 
     res.status(HttpStatusCode.OK).json({
       message: "Login user successfully",
-      data: existingUser
+      data: existingUser,
     });
   } catch (exception) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -28,7 +28,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   // destructuring
-  const { name, email, password, phoneNumber, address } = req.body;
+  const { name, email, password, imgUrl, balance } = req.body;
 
   try {
     debugger;
@@ -36,8 +36,8 @@ const register = async (req, res) => {
       name,
       email,
       password,
-      phoneNumber,
-      address,
+      imgUrl,
+      balance,
     });
     res.status(HttpStatusCode.INSERT_OK).json({
       message: "Register user successfully",
